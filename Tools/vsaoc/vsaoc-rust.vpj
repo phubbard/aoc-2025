@@ -1,0 +1,56 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+    Version="10.0"
+    VendorName="SlickEdit"
+    TemplateName="Other - Empty Project"
+    WorkingDir=".">
+    <CustomFolders>
+        <Folder
+            Name="Source Files"
+            Filters="*.rs"
+            GUID="{A0C0D002-0001-0001-0001-000000000001}"></Folder>
+        <Folder
+            Name="Other Files"
+            Filters=""
+            GUID="{A0C0D002-0001-0001-0001-000000000002}"/>
+    </CustomFolders>
+    <Config
+        Name="Release"
+        Type="gnuc"
+        OutputFile=""
+        CompilerConfigName="">
+        <Menu>
+            <Target
+                Name="Compile"
+                MenuCaption="&amp;Compile"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveCurrent"
+                RunFromDir="%rw">
+                <Exec CmdLine='cargo build'/>
+            </Target>
+            <Target
+                Name="Build"
+                MenuCaption="&amp;Build"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveWorkspaceFiles"
+                RunFromDir="%rw">
+                <Exec CmdLine='cargo build'/>
+            </Target>
+            <Target
+                Name="Execute"
+                MenuCaption="E&amp;xecute"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone"
+                RunFromDir="%rw">
+                <Exec CmdLine='cargo run'/>
+            </Target>
+        </Menu>
+    </Config>
+
+    <Files AutoFolders="PackageView">
+        <Folder Name="../../aoc-2025">
+            <F N="../../aoc-2025/*.rs" Recurse="1" Excludes=""/>
+        </Folder>
+    </Files>
+
+</Project>
