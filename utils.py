@@ -10,6 +10,21 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(pathname)s(%(lineno)s): %(levelname)s %(message)s')
 log = logging.getLogger()
 
+
+def assert_expr(expr: str):
+    # Pass in an expression as a string and this'll print values of variables. It's a loaded gun.
+    frame = inspect.currentframe().f_back
+    env = frame.f_locals
+    if not eval(expr, frame.f_globals, env):
+        # extract variables used in the expression
+        names = sorted({
+            name for name in env
+            if name in expr
+        })
+        details = " | ".join(f"{n}={env[n]!r}" for n in names)
+        raise AssertionError(f"{expr} FAILED: {details}")
+
+
 def blog(message, multiline=None, frameNudge=0):
     """Brad's logging utility.
     
@@ -106,6 +121,18 @@ def get_data_lines(problem_number):
     sample_data = clean_lines(open(f'./data/{zero_padded}s.txt', 'r').readlines())
     full_data = clean_lines(open(f'./data/{zero_padded}.txt', 'r').readlines())
     return (sample_data, full_data)
+
+
+# 12/7/25 - adding 'sample data answers' to data files, so extend the pattern for that
+def get_all_data(problem_number: int) -> tuple:
+    # Return sample data, full data and sample data answer as 3-tuple or 4-tuple if part two
+    p1_answer = get_data_as_lines(problem_number, suffix='sa')
+    try:
+        p2_answer = get_data_as_lines(problem_number, suffix='p2sa')
+    except FileNotFoundError:
+        p2_answer = None
+    sample, full = get_data_lines(problem_number)
+    return sample, full, p1_answer, p2_answer
 
 
 # Pick's theorem and the shoelace formula
