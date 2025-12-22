@@ -41,6 +41,7 @@ def blog(message, multiline=None, frameNudge=0):
             print(f"{first_prefix} {line}")
             first_prefix = " " * len(first_prefix)
 
+
 def find_permutations(input_chars, length=8):
     return permutations(input_chars, r=length)
 
