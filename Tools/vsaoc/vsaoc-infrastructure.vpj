@@ -1,0 +1,71 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+    Version="10.0"
+    VendorName="SlickEdit"
+    TemplateName="Other - Empty Project"
+    WorkingDir=".">
+    <CustomFolders>
+        <Folder
+            Name="Source Files"
+            Filters="*.sh;*.mk"
+            GUID="{A0C0D003-0001-0001-0001-000000000001}"></Folder>
+        <Folder
+            Name="Other Files"
+            Filters=""
+            GUID="{A0C0D003-0001-0001-0001-000000000002}"/>
+    </CustomFolders>
+    <Config
+        Name="Release"
+        Type="gnuc"
+        OutputFile=""
+        CompilerConfigName="">
+        <Menu>
+            <Target
+                Name="Execute"
+                MenuCaption="E&amp;xecute"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone"
+                RunFromDir="%rw">
+                <Exec CmdLine='bash "%f"'/>
+            </Target>
+        </Menu>
+    </Config>
+
+    <Files AutoFolders="PackageView">
+        <!-- Root level config files -->
+        <Folder Name="../../aoc-2025">
+            <F N="../../aoc-2025/*.md"   Recurse="0" Excludes=""/>
+            <F N="../../aoc-2025/*.txt"  Recurse="0" Excludes=""/>
+            <F N="../../aoc-2025/*.toml" Recurse="0" Excludes=""/>
+            <F N="../../aoc-2025/*.env"  Recurse="0" Excludes=""/>
+        </Folder>
+
+        <!-- Tabtargets -->
+        <Folder Name="../../aoc-2025/tt">
+            <F N="../../aoc-2025/tt/*.sh" Recurse="0" Excludes=""/>
+        </Folder>
+
+        <!-- BUK configuration -->
+        <Folder Name="../../aoc-2025/.buk">
+            <F N="../../aoc-2025/.buk/*.sh"  Recurse="0" Excludes=""/>
+            <F N="../../aoc-2025/.buk/*.env" Recurse="0" Excludes=""/>
+        </Folder>
+
+        <!-- Tools directory -->
+        <Folder Name="../../aoc-2025/Tools">
+            <F N="../../aoc-2025/Tools/*.sh"   Recurse="1" Excludes=""/>
+            <F N="../../aoc-2025/Tools/*.mk"   Recurse="1" Excludes=""/>
+            <F N="../../aoc-2025/Tools/*.md"   Recurse="1" Excludes=""/>
+            <F N="../../aoc-2025/Tools/*.txt"  Recurse="1" Excludes=""/>
+            <F N="../../aoc-2025/Tools/*.toml" Recurse="1" Excludes=""/>
+            <F N="../../aoc-2025/Tools/*.env"  Recurse="1" Excludes=""/>
+        </Folder>
+
+        <!-- Data directory -->
+        <Folder Name="../../aoc-2025/data">
+            <F N="../../aoc-2025/data/*.txt" Recurse="1" Excludes=""/>
+        </Folder>
+
+    </Files>
+
+</Project>
