@@ -2,36 +2,47 @@
 from utils import get_all_data, log, assert_expr
 
 
-def find_max(bank: str, start_idx: int) -> tuple:
-    if start_idx >= len(bank):
-        return '0','0'
-
-    for k in '987654321':
-        k_idx = bank.find(k, start_idx)
-        if k_idx >= 0:
-            return k, k_idx
+def bfi_highest_two(bank: str) -> int:
+    first_digit = second_digit = None
+    best_score = 0
+    for cur_idx, cur_batt in enumerate(bank):
+        for sec_idx, sec_batt in enumerate(bank[cur_idx + 1:]):
+            candidate = int(cur_batt + sec_batt)
+            best_score = max(best_score, candidate)
+    return best_score
 
 
 def part_one(data) -> int:
-    max_joltage = 0
     score = 0
     for bank in data:
-        left_digit, index = find_max(bank, 0)
-        right_digit, _ = find_max(bank, index+1)
-        max_joltage = int(left_digit + right_digit)
+        max_joltage = bfi_highest_two(bank)
         score += max_joltage
-        log.info(f"{bank=} {max_joltage} {score=}")
-
+        log.debug(f"{bank=} {max_joltage} {score=}")
     return score
+
+
+def part_two(data) -> int:
+    return 0
 
 
 def test_part1():
     sample, full, answer, _ = get_all_data(3)
     dut = part_one(sample)
     assert_expr("str(dut) == answer[0]")
+    log.info("Doing full dataset")
+    # if we got here, we can proceed to the full data set
+    log.info(f'{part_one(full)=}')
 
-    # log.info(f'{part_one(full)=}')
+
+def test_part2():
+    sample, full, _, answer = get_all_data(3)
+    dut = part_two(sample)
+    assert_expr("str(dut) == answer[0]")
+    log.info("Doing full dataset")
+    # if we got here, we can proceed to the full data set
+    log.info(f'{part_two(full)=}')
 
 
 if __name__ == '__main__':
     test_part1()
+    test_part2()
