@@ -26,7 +26,7 @@ def assert_expr(expr: str):
 
 
 def blog(message, multiline=None, frameNudge=0):
-    """Brad's logging utility.
+    """B's logging utility.
     
     Document this later, but frameNudge greater than 0 will report the log as coming
     from higher on the stack, useful when there is wrapping."""
@@ -72,20 +72,24 @@ def make_2d_array(num_rows, num_cols, fill=0):
     return [[fill] * num_cols for _ in range(num_rows)]
 
 
+def dimensions(array_2d: list) -> tuple:
+    num_rows = len(array_2d)
+    num_cols = len(array_2d[0])
+    return num_rows, num_cols
+
+
 def load_2d_arrays(problem_number):
     # some of these encode a map as a 2D array, so we should be able to reuse this.
     sample, full = get_data_lines(problem_number)
 
-    num_rows = len(sample)
-    num_cols = len(sample[0])
+    num_rows, num_cols = dimensions(sample)
     data = make_2d_array(num_rows, num_cols)
     for row, line in enumerate(sample):
         for col, char in enumerate(line):
             data[row][col] = char
     sample_2d = data
 
-    num_rows = len(full)
-    num_cols = len(full[0])
+    num_rows, num_cols = dimensions(full)
     data = make_2d_array(num_rows, num_cols)
     for row, line in enumerate(full):
         for col, char in enumerate(line):
@@ -93,6 +97,16 @@ def load_2d_arrays(problem_number):
     full_2d = data
 
     return sample_2d, full_2d
+
+
+def print_2d_array(array2d: list):
+    num_rows, num_cols = dimensions(array2d)
+    for row in range(num_rows):
+        pstr = '"'
+        for col in range(num_cols):
+            pstr += array2d[row][col]
+        pstr += '"'
+        print(pstr)
 
 
 def get_column(data, col_idx):
