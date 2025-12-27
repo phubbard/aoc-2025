@@ -1,11 +1,13 @@
 from collections import defaultdict
 import heapq
+from copy import deepcopy
 from itertools import permutations, combinations_with_replacement
-
+from functools import reduce
+import operator
 import inspect
 import os
-
 import logging
+
 
 logging.basicConfig(level=logging.INFO, format='%(pathname)s(%(lineno)s): %(levelname)s %(message)s')
 log = logging.getLogger()
@@ -65,6 +67,53 @@ def clean_lines(input_lines):
 
 def manhattan_distance(p1, p2):
     return sum([abs(p1[x] - p2[x]) for x in range(len(p1))])
+
+
+class Data2D():
+    # Helper class for problems that use 2D data - maps and the like.
+    def __init__(self):
+        self._data = [[]]
+
+    def load(self, problem_number: int, sample=True, strip=True, fill=0):
+        zero_padded = f"{problem_number:02}"
+        sample_file = f'./data/{zero_padded}s.txt'
+        data_file = f'./data/{zero_padded}.txt'
+        if sample:
+            raw_lines = open(sample_file, 'r').readlines()
+        else:
+            raw_lines = open(data_file, 'r',).readlines()
+        if strip:
+            data_lines = clean_lines(raw_lines)
+        else:
+            data_lines = raw_lines
+        n_rows = len(data_lines)
+        n_cols = len(data_lines[0])
+        self.fill(n_rows, n_cols, fill)
+        for row, line in enumerate(data_lines):
+            for col, char in enumerate(line):
+                self._data[row][col] = char
+
+    def dimensions(self) -> tuple:
+        # return num_rows, num_cols
+        return len(self._data), len(self._data[0])
+
+    def fill(self, num_rows: int, num_cols: int, fill=0):
+        # Fill can be any scalar data type eg int, character, float
+        self._data = [[fill] * num_cols for _ in range(num_rows)]
+
+    def column(self, index: int):
+        return [row[index] for row in self._data]
+
+    def __repr__(self):
+        rc = []
+        num_rows, num_cols = self.dimensions()
+        for row in range(num_rows):
+            pstr = '"'
+            for col in range(num_cols):
+                pstr += self._data[row][col]
+            pstr += '"'
+            rc.append(pstr)
+        return rc
 
 
 def make_2d_array(num_rows, num_cols, fill=0):
@@ -150,6 +199,12 @@ def get_all_data(problem_number: int) -> tuple:
     return sample, full, p1_answer, p2_answer
 
 
+def product(inp: list):
+    # Return the multiplicative product of a list / iterable of numbers
+    # from https://stackoverflow.com/questions/595374/whats-the-function-like-sum-but-for-multiplication-product
+    return reduce(operator.mul, inp, 1)
+
+
 # Pick's theorem and the shoelace formula
 # https://en.wikipedia.org/wiki/Pick%27s_theorem
 # https://en.wikipedia.org/wiki/Shoelace_formula
@@ -160,7 +215,7 @@ def shoelace_formula(polygonBoundary, absoluteValue = True):
     nbCoordinates = len(polygonBoundary)
     nbSegment = nbCoordinates - 1
 
-    l = [(polygonBoundary[i+1][0] - polygonBoundary[i][0]) * (polygonBoundary[i+1][1] + polygonBoundary[i][1]) for i in xrange(nbSegment)]
+    l = [(polygonBoundary[i+1][0] - polygonBoundary[i][0]) * (polygonBoundary[i+1][1] + polygonBoundary[i][1]) for i in range(nbSegment)]
 
     if absoluteValue:
         return abs(sum(l) / 2.)
