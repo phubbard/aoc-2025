@@ -91,28 +91,48 @@ class Data2D():
         self.fill(n_rows, n_cols, fill)
         for row, line in enumerate(data_lines):
             for col, char in enumerate(line):
+                if char == '\n':
+                    continue
                 self._data[row][col] = char
 
     def dimensions(self) -> tuple:
         # return num_rows, num_cols
         return len(self._data), len(self._data[0])
 
+    def num_rows(self):
+        return self.dimensions()[0]
+
+    def num_cols(self):
+        return self.dimensions()[1]
+
     def fill(self, num_rows: int, num_cols: int, fill=0):
         # Fill can be any scalar data type eg int, character, float
         self._data = [[fill] * num_cols for _ in range(num_rows)]
 
+    def add_padding(self, fill=0):
+        # Add an empty row and column all around. Useful for edge cases. Modifies the array in place.
+        old = self._data
+        old_dims = self.dimensions()
+        self.fill(old_dims[0] + 2, old_dims[1] + 2, fill=fill)
+        for row in range(old_dims[0]):
+            for col in range(old_dims[1]):
+                self._data[row + 1][col + 1] = old[row][col]
+
     def column(self, index: int):
         return [row[index] for row in self._data]
 
-    def __repr__(self):
-        rc = []
+    def __getitem__(self, item):
+        return self._data[item]
+
+    def __str__(self):
+        rc = ''
         num_rows, num_cols = self.dimensions()
         for row in range(num_rows):
             pstr = '"'
             for col in range(num_cols):
                 pstr += self._data[row][col]
             pstr += '"'
-            rc.append(pstr)
+            rc += pstr + '\n'
         return rc
 
 
