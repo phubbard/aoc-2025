@@ -59,6 +59,41 @@ def part_one(sample: bool) -> int:
     return score
 
 
+def part_two(sample: bool) -> int:
+    data = Data2D()
+    data.load(7, sample=sample, strip=True)
+    data.add_padding(BLANK)
+    # print(sample)
+
+    # Find starting point
+    start_col = as_str(data[1]).index(START)
+    data[2][start_col] = BEAM
+    routes = [0 for i in range(data.num_cols())]
+    routes[start_col] = 1
+
+
+
+    score = 0
+    for idx in range(3, data.num_rows() - 1,2):
+        # print(sample)
+        splitters = findall(as_str(data[idx]), SPLITTER)
+        after_routes = routes.copy()
+        for splitter in splitters:
+            after_routes[splitter - 1] += routes[splitter]
+            after_routes[splitter + 1] += routes[splitter]
+            after_routes[splitter] = 0
+        # print(idx,after_routes)
+        routes = [x for x in after_routes]
+
+    score = sum(routes)
+
+    log.info(f"part two sample {score=}")
+    return score
+
+
 if __name__ == '__main__':
     part_one(True)
     part_one(False)
+
+    part_two(True)
+    part_two(False)
