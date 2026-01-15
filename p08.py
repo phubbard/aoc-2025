@@ -84,7 +84,33 @@ def part_one(input_data: list, num_pairs=10) -> int:
 
 
 def part_two(input_data: list) -> int:
-    return 0
+    data = parse(input_data)
+    # print(distance(data[0], data[1]))
+    distances = find_all_pairs(data)
+    first_chunk = [x for x in distances if x[2] > 0]
+    first_chunk.sort(key=lambda x: x[2])
+    trimmed_chunk = first_chunk[::2]
+
+    circuits = [[x] for x in data]
+    counter = 0
+    while len(circuits) > 1 and counter < len(trimmed_chunk):
+        connection = trimmed_chunk[counter]
+        disjoint = []
+        newcirc = []
+
+        for c in circuits:
+            if in_circ(connection[0], c):
+                newcirc.extend(c)
+            elif in_circ(connection[1], c):
+                newcirc.extend(c)
+            else:
+                disjoint.append(c)
+        circuits = disjoint + [newcirc]
+        counter += 1
+
+    last_circ = trimmed_chunk[counter - 1]
+    log.info(f"{last_circ=} {counter=}")
+    return last_circ[0][0] * last_circ[1][0]
 
 
 def test_part1():
@@ -105,9 +131,10 @@ def test_part2():
     assert_expr("str(score) == answer[0]")
     log.info("Doing full dataset")
     # if we got here, we can proceed to the full data set
-    log.info(f'{score=}')
+    score = part_two(full)
+    log.info(f'part two full {score=}')
 
 
 if __name__ == '__main__':
-    test_part1()
-    # test_part2()
+    # test_part1()
+    test_part2()
